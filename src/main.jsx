@@ -3,12 +3,6 @@ const React = require("react");
 const ReactDOM = require("react-dom");
 const {Pattern, Board} = require("tgol");
 
-const bbox = {
-  top: -10,
-  left: -10,
-  right: 10,
-  bottom: 10,
-}
 const board = Board([ 
   "o|_|_|",
   "_|*|_|",
