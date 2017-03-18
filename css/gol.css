@@ -1,0 +1,24 @@
+html, body, div#grid, svg {
+  width:100%;
+  height:100%;
+  margin:0px;
+  padding:0px;
+  box-sizing:border-box;
+  top:0px;
+  left:0px;
+  position:absolute;
+}
+
+rect.mouse-catcher {
+  fill:yellow;
+  opacity:0.1;
+}
+
+.cell.white {
+  fill: red;
+}
+
+.cell.black {
+  fill: black;
+}
+
