@@ -1,5 +1,7 @@
-
-const Grid = require("./Grid.jsx");
+const responsive = require("./responsive.jsx");
+const fitting = require("./fitting.jsx");
+const withCursor = require("./with-cursor.jsx");
+const Grid = responsive(fitting(withCursor(require("./Grid.jsx"))));
 const React = require("react");
 const ReactDOM = require("react-dom");
 const {Pattern, Board, Bbox} = require("tgol");
