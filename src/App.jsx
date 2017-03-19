@@ -8,6 +8,11 @@ const request = Promise.promisify(require("request"));
 const identity = function(x){return x};
 const constant = function(x){return function(){return x;};};
 const get = function(prop){return function(obj){return obj[prop];};};
+
+const stringify = function(cells){
+  return Board(cells).asciiArt();
+};
+
 const undoable = function(spec){
   const update = (
     typeof spec === "function"
@@ -22,12 +27,45 @@ const undoable = function(spec){
     newState.cells = newState.cells || state.cells;
     newState.undo= (
       state.cells 
-    ? [newState.cells].concat(state.undo)
+    ? [state.cells].concat(state.undo)
     : state.undo
     );
     return newState;
   };
 };
+
+const MainPanel = function({cells, onCellClicked}){
+  return ( 
+    cells
+  ? <Grid 
+      bbox={new Bbox(cells)} 
+      livingCells={cells}
+      onCellClicked={onCellClicked}
+    /> 
+  : <div className="placeholder">No Data (yet)!</div>
+  );
+};
+
+const ToolBar = function({commands}){
+  return (
+    <div className="toolbar">
+    {
+      commands.map(function(props){
+        return <ToolBarButton {...props} />;
+      })
+    }
+    </div>
+  );
+};
+
+const ToolBarButton = function({icon, action, enabled=true}){
+  return ( 
+    <button className={"button "+(enabled?"enabled":"disabled")}  onClick={action} disabled={!enabled}>
+      <img src={icon} />
+    </button>
+  );
+};
+
 const App = React.createClass({
   getInitialState:function(){
     return {
@@ -41,7 +79,7 @@ const App = React.createClass({
     this.setState(undoable({cells:board.livingCells()}));
   },
   play: function(){
-    const id=setInterval(this.autoStep, 200);
+    const id=setInterval(this.autoStep, 34);
     this.setState(undoable({intervalId:id}));
   },
   stop: function(){
@@ -52,12 +90,12 @@ const App = React.createClass({
   },
   autoStep: function(){
     this.setState(function({cells}){
-      return Board(cells).next().livingCells();
+      return {cells: Board(cells).next().livingCells()};
     });
   },
-  manualStep: function(){
+  step: function(){
     this.setState(undoable(function({cells}){
-      return Board(cells).next().livingCells();
+      return {cells: Board(cells).next().livingCells()};
     }));
   },
   cellClicked: function([x,y]){
@@ -80,6 +118,12 @@ const App = React.createClass({
       };
     });
   },
+  undoEnabled: function(){
+    return this.state.undo.length > 0;
+  },
+  redoEnabled: function(){
+    return this.state.redo.length > 0;
+  },
   redo: function(){
     this.setState(function({undo,cells,redo}){
       const top=redo[0];
@@ -99,17 +143,32 @@ const App = React.createClass({
       .then(Board)
       .then(this.boardLoaded)
   },
+  createCommand: function(key){
+    const enabledProp = key+"Enabled";
+    const enabled = this.hasOwnProperty(enabledProp) ? this[enabledProp]() : true;
+    return {
+      key:key,
+      action:this[key],
+      icon: "/images/"+key+".svg",
+      enabled: enabled
+    };
+  },
   render:function(){
-    const {cells} = this.state;
-    return ( 
-      cells
-    ? <Grid 
-        bbox={new Bbox(cells)} 
-        livingCells={cells}
-        onCellClicked={this.cellClicked}
-      /> 
-    : <div className="placeholder">No Data (yet)!</div>
-    );
+    const {cells, intervalId} = this.state;
+    const self = this;
+    const commands = [
+      (intervalId ? "stop" : "play"),
+      "step", 
+      "undo",
+      "redo"
+    ].map(this. createCommand);
+
+    return (
+      <div className="layout">
+        <MainPanel cells={cells} onCellClicked={this.cellClicked} />
+        <ToolBar commands={commands} />
+      </div>
+    )
 
   }
     

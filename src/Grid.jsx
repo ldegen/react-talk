@@ -51,9 +51,10 @@ const Grid = React.createClass({
     return fit(bbox, this.viewport());
   },
   mapPos: function(ev){
+    const {top,left}=ev.currentTarget.getBoundingClientRect();
     return this
       .viewportTransform()
-      .invert([ev.clientX,ev.clientY])
+      .invert([ev.clientX-left,ev.clientY-top])
       .map(Math.floor);
   
   },
