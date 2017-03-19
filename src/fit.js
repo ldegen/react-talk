@@ -10,9 +10,14 @@ module.exports = function(ftr,vwp){
 
   const scale = 1 / Math.max(dx / dv, dy / dw);
   const translate = [v - scale * x, w - scale * y];
+  const invert = function([x,y]){
+    return [(x-translate[0])/scale, (y-translate[1])/scale];
+  };
   return {
+    invert:invert,
     scale:scale, 
     translate:translate, 
-    transform:"translate("+translate+") scale("+scale+")"};
+    transform:"translate("+translate+") scale("+scale+")"
+  };
 };
 

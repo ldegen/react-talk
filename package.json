@@ -13,6 +13,7 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
+    "bluebird": "^3.5.0",
     "tgol": "^0.1.0"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "browserify": "^14.1.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "request": "^2.81.0",
     "watchify": "^3.9.0"
   },
   "browser": "src/main.jsx",
