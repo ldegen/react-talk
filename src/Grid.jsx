@@ -21,25 +21,26 @@ const Cursor = function({position}){
   );
 };
 
+const drawCells = function(cells){
+  return cells.map(function([x,y,z]){
+    return <Cell key={[x,y]} data={[x,y,z]}/>;
+  });
+};
+
 const Grid = function(props={}){
   const {
     events={},
-    cursor,
+    cursor=null,
     livingCells=[], 
-    transform:{scale, transform}
+    transform:{ scale=1, transform=""}={}
   } = props;
   const style = {strokeWidth:(2/scale)};
-  const drawCell = function([x,y,z]){
-    return <Cell key={[x,y]} data={[x,y,z]}/>;
-  };
+
   return(
     <svg {...events}>
-      <rect 
-        className="mouse-catcher" 
-        x="0" y="0" width="10000" height="10000"/>
-
+      <rect className="mouse-catcher" width="10000" height="10000"/>
       <g className="canvas" transform={transform} style={style}>
-        { livingCells.map(drawCell)}
+        {drawCells(livingCells)}
         <Cursor position={cursor} />
       </g>
     </svg>

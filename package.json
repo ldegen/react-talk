@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watchify": "watchify -v --debug -o build/app.js .",
+    "http-server":"http-server",
     "browserify": "browserify --debug -o build/app.js .",
     "prepublish": "mkdir -p build && npm run browserify"
   },
@@ -21,6 +22,7 @@
     "babel-preset-react": "^6.23.0",
     "babelify": "^7.3.0",
     "browserify": "^14.1.0",
+    "http-server": "^0.9.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "request": "^2.81.0",

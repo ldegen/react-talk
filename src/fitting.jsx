@@ -1,9 +1,13 @@
 const fit = require("./fit.js");
+const transform = require("./transform");
 const shallowCopy = require("./shallow-copy");
 const React = require("react");
 const MARGIN=75;
 
 const viewport = function(size){
+  if(!size){
+    return null;
+  }
   return {
     top:MARGIN, 
     left:MARGIN, 
@@ -13,6 +17,9 @@ const viewport = function(size){
 };
 
 const viewportTransform = function(bbox, size){
+  if(!bbox || !size){
+    return transform();
+  }
   return fit(bbox, viewport(size));
 };
 

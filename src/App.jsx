@@ -1,7 +1,4 @@
-const responsive = require("./responsive.jsx");
-const fitting = require("./fitting.jsx");
-const withCursor = require("./with-cursor.jsx");
-const Grid = responsive(fitting(withCursor(require("./Grid.jsx"))));
+const Layout = require("./Layout.jsx");
 const React = require("react");
 const ReactDOM = require("react-dom");
 const {Pattern, Board, Bbox} = require("tgol");
@@ -34,38 +31,6 @@ const undoable = function(spec){
     );
     return newState;
   };
-};
-
-const MainPanel = function({cells, onCellClicked}){
-  return ( 
-    cells
-  ? <Grid 
-      bbox={new Bbox(cells)} 
-      livingCells={cells}
-      onCellClicked={onCellClicked}
-    /> 
-  : <div className="placeholder">No Data (yet)!</div>
-  );
-};
-
-const ToolBar = function({commands}){
-  return (
-    <div className="toolbar">
-    {
-      commands.map(function(props){
-        return <ToolBarButton {...props} />;
-      })
-    }
-    </div>
-  );
-};
-
-const ToolBarButton = function({icon, action, enabled=true}){
-  return ( 
-    <button className={"button "+(enabled?"enabled":"disabled")}  onClick={action} disabled={!enabled}>
-      <img src={icon} />
-    </button>
-  );
 };
 
 const App = React.createClass({
@@ -157,7 +122,7 @@ const App = React.createClass({
   },
   render:function(){
     const {cells, intervalId} = this.state;
-    const self = this;
+    const onCellClicked = this.cellClicked;
     const commands = [
       (intervalId ? "stop" : "play"),
       "step", 
@@ -165,12 +130,7 @@ const App = React.createClass({
       "redo"
     ].map(this. createCommand);
 
-    return (
-      <div className="layout">
-        <MainPanel cells={cells} onCellClicked={this.cellClicked} />
-        <ToolBar commands={commands} />
-      </div>
-    )
+    return (<Layout {...{commands, cells, onCellClicked}} />);
 
   }
     
