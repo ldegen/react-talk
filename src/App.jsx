@@ -1,4 +1,4 @@
-const Layout = require("./Layout.jsx");
+const Ui = require("./Ui.jsx");
 const React = require("react");
 const ReactDOM = require("react-dom");
 const {Pattern, Board, Bbox} = require("tgol");
@@ -36,10 +36,10 @@ const undoable = function(spec){
 const App = React.createClass({
   getInitialState:function(){
     return {
-      cells:null,
+      cells:undefined,
       undo:[],
       redo:[],
-      intervalId: null
+      intervalId: undefined
     }
   },
   boardLoaded: function(board){
@@ -120,18 +120,25 @@ const App = React.createClass({
       enabled: enabled
     };
   },
-  render:function(){
-    const {cells, intervalId} = this.state;
-    const onCellClicked = this.cellClicked;
-    const commands = [
-      (intervalId ? "stop" : "play"),
+  createCommands: function(){
+    return [
+      (this.state.intervalId ? "stop" : "play"),
       "step", 
       "undo",
       "redo"
     ].map(this. createCommand);
+  },
+  render:function(){
+    const {cells} = this.state;
+    const onCellClicked = this.cellClicked;
+    const commands = this.createCommands();
 
-    return (<Layout {...{commands, cells, onCellClicked}} />);
-
+    return (<Ui {...{commands, cells, onCellClicked}} />);
+   
+    // bzw:
+    // return <Ui commands={commands} cells={cells} ...usw... />
+    // bzw:
+    // return RcE(Ui, { commands, cells, onCellClicked });
   }
     
 });

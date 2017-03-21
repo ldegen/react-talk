@@ -1,5 +1,5 @@
 while read p; do 
-  sleep 0.1
+  sleep 0.3
   if [ -z $1 ]; then
     echo "$p"
   else
