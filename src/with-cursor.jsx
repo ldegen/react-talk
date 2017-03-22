@@ -9,9 +9,21 @@ const withCursor = function(Base,propNames={}){
     clickHandlerProp="onCellClicked"
   } = propNames;
 
-
   return React.createClass({
+
+    render: function(){
+      const props = shallowCopy(this.props);
+      props[cursorProp] = this.state.cursor;
+      props[eventsProp] = {
+        onMouseMove: this.mouseMove,
+        onMouseLeave: this.mouseLeave,
+        onClick: this.click
+      };
+      return <Base {...props} />;
+    },
+
     getInitialState: function(){return {};},
+
     mouseMove: function(ev){
       this.setState({cursor:this.mapPos(ev)});
     },
@@ -29,20 +41,6 @@ const withCursor = function(Base,propNames={}){
         .invert([ev.clientX-left,ev.clientY-top])
         .map(Math.floor);
     
-    },
-    render: function(){
-      const props = shallowCopy(this.props);
-      props[cursorProp] = this.state.cursor;
-      props[eventsProp] = {
-        onMouseMove: this.mouseMove,
-        onMouseLeave: this.mouseLeave,
-        onClick: this.click
-      };
-      return (
-        <Base 
-          {...props} 
-        />
-      );
     }
   });
 };
