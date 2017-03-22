@@ -6,7 +6,7 @@ const get = (prop)=>(obj)=>obj[prop];
 const points = get("livingCells");
 
 const features =[
-  //require("./with-cursor.jsx"),
+  require("./with-cursor.jsx"),
   require("./fitting.jsx"),
   require("./responsive.jsx"),
   require("./with-bbox.jsx")(points),
