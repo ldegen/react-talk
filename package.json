@@ -1,12 +1,12 @@
 {
   "name": "react-talk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "my talk",
   "main": "src/main.jsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watchify": "watchify -v --debug -o build/app.js .",
-    "http-server":"http-server",
+    "http-server": "http-server",
     "browserify": "browserify --debug -o build/app.js .",
     "prepublish": "mkdir -p build && npm run browserify"
   },
